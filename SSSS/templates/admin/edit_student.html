@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Student — SSSS{% endblock %}
+{% block page_title %}Edit Student{% endblock %}
+{% block page_subtitle %}Update student information{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 800px;">
+  <div class="card-header">
+    <h3><i class="fas fa-edit" style="color: var(--warning);"></i> Edit: {{ student.name }}</h3>
+    <a href="{{ url_for('admin_students') }}" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+  </div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" value="{{ student.name }}" required>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" name="dob" value="{{ student.dob }}">
+        </div>
+        <div class="form-group">
+          <label>Class</label>
+          <select name="class_id">
+            {% for c in classes %}
+            <option value="{{ c.id }}" {{ 'selected' if c.id == student.class_id }}>{{ c.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select name="gender">
+            <option {{ 'selected' if student.gender == 'Male' }}>Male</option>
+            <option {{ 'selected' if student.gender == 'Female' }}>Female</option>
+            <option {{ 'selected' if student.gender == 'Other' }}>Other</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Address</label>
+          <textarea name="address">{{ student.address }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Parent Name</label>
+          <input type="text" name="parent_name" value="{{ student.parent_name }}">
+        </div>
+        <div class="form-group">
+          <label>Parent CNIC</label>
+          <input type="text" name="parent_cnic" value="{{ student.parent_cnic }}">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" name="phone" value="{{ student.phone }}">
+        </div>
+      </div>
+      <div class="flex gap-2 mt-2">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Student</button>
+        <a href="{{ url_for('admin_students') }}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

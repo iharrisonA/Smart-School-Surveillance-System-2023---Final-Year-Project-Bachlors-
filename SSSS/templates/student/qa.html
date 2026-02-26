@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Q&A — SSSS{% endblock %}
+{% block page_title %}Q & A{% endblock %}
+{% block page_subtitle %}Ask questions and get answers from your teachers{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><h3><i class="fas fa-comments" style="color: var(--accent2);"></i> Ask a Question</h3></div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="form-group">
+          <label>Select Teacher</label>
+          <select name="teacher_id" required>
+            <option value="">Select Teacher</option>
+            {% for t in teachers %}
+            <option value="{{ t.id }}">{{ t.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select name="subject_id" required>
+            <option value="">Select Subject</option>
+            {% for t in teachers %}
+            <option value="{{ t.subject_id }}">{{ t.subject_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Question *</label>
+          <textarea name="question" placeholder="Type your question here..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Question</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3><i class="fas fa-list" style="color: var(--primary);"></i> My Questions</h3></div>
+    <div style="max-height: 450px; overflow-y: auto;">
+      {% if questions %}
+        {% for q in questions %}
+        <div style="padding: 0.85rem 1.25rem; border-bottom: 1px solid #f3f4f6;">
+          <div class="flex justify-between items-center mb-1">
+            <div style="font-size: 0.75rem; color: var(--muted);"><i class="fas fa-chalkboard-teacher"></i> {{ q.teacher_name }} &bull; {{ q.subject_name }}</div>
+            <span class="badge badge-{{ 'success' if q.answer else 'warning' }}">{{ 'Answered' if q.answer else 'Pending' }}</span>
+          </div>
+          <div style="background: #eff6ff; border-radius: 8px; padding: 0.65rem; margin-bottom: 0.5rem; font-size: 0.875rem;">
+            <strong style="font-size: 0.72rem; color: #3b82f6;">Q:</strong> {{ q.question }}
+          </div>
+          {% if q.answer %}
+          <div style="background: #f0fdf4; border-radius: 8px; padding: 0.65rem; font-size: 0.875rem;">
+            <strong style="font-size: 0.72rem; color: var(--success);">A:</strong> {{ q.answer }}
+          </div>
+          {% endif %}
+          <div style="font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem;"><i class="fas fa-clock"></i> {{ q.created_at[:10] }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="empty-state"><i class="fas fa-comments"></i><p>No questions asked yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

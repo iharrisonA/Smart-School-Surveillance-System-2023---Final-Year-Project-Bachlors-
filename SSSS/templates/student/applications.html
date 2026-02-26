@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Applications — SSSS{% endblock %}
+{% block page_title %}My Applications{% endblock %}
+{% block page_subtitle %}Submit and track your applications{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><h3><i class="fas fa-file-signature" style="color: var(--primary);"></i> Submit New Application</h3></div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="form-group">
+          <label>Subject / Reason *</label>
+          <input type="text" name="subject" placeholder="e.g., Application for Leave" required>
+        </div>
+        <div class="form-group">
+          <label>Details *</label>
+          <textarea name="details" placeholder="Write your application here..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Send To</label>
+          <select name="send_to">
+            <option value="Admin">Admin / Principal</option>
+            <option value="Teacher">Class Teacher</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Application</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3><i class="fas fa-list" style="color: var(--primary);"></i> My Applications</h3></div>
+    <div style="max-height: 450px; overflow-y: auto;">
+      {% if applications %}
+        {% for app in applications %}
+        <div style="padding: 0.85rem 1.25rem; border-bottom: 1px solid #f3f4f6;">
+          <div class="flex justify-between items-center mb-1">
+            <strong style="font-size: 0.875rem;">{{ app.subject }}</strong>
+            <span class="badge badge-{{ 'warning' if app.status == 'Pending' else 'success' if app.status == 'Approved' else 'danger' }}">{{ app.status }}</span>
+          </div>
+          <p style="font-size: 0.8rem; color: #374151;">{{ app.details[:100] }}</p>
+          <div style="font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem;">
+            <i class="fas fa-user"></i> Sent to: {{ app.send_to }} &bull; <i class="fas fa-clock"></i> {{ app.created_at[:10] }}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="empty-state"><i class="fas fa-file-alt"></i><p>No applications submitted yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

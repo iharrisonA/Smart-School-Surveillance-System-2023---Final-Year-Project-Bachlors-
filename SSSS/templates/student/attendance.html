@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}My Attendance — SSSS{% endblock %}
+{% block page_title %}My Attendance{% endblock %}
+{% block page_subtitle %}View your attendance records{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-calendar-check" style="color: var(--success);"></i> Attendance Records</h3>
+    <div class="flex gap-1">
+      <span class="badge badge-success">{{ records|selectattr('status','equalto','Present')|list|length }} Present</span>
+      <span class="badge badge-danger">{{ records|selectattr('status','equalto','Absent')|list|length }} Absent</span>
+    </div>
+  </div>
+  {% if records %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Subject</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.date }}</td>
+          <td>{{ r.subject_name or 'N/A' }}</td>
+          <td><span class="badge badge-{{ 'success' if r.status == 'Present' else 'danger' }}"><i class="fas fa-{{ 'check' if r.status == 'Present' else 'times' }}"></i> {{ r.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state"><i class="fas fa-calendar-check"></i><p>No attendance records yet.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

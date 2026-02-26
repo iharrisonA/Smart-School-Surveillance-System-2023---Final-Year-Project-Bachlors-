@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Marks — SSSS{% endblock %}
+{% block page_title %}Assign Marks{% endblock %}
+{% block page_subtitle %}Enter examination marks for students{% endblock %}
+{% block content %}
+<div class="card mb-3">
+  <div class="card-header"><h3><i class="fas fa-search" style="color: var(--accent2);"></i> Select Class & Subject</h3></div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-grid-3">
+        <div class="form-group">
+          <label>Class</label>
+          <select name="class_id" required>
+            <option value="">Choose Class</option>
+            {% for a in assignments %}
+            <option value="{{ a.class_id }}">{{ a.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select name="subject_id" required>
+            <option value="">Choose Subject</option>
+            {% for a in assignments %}
+            <option value="{{ a.subject_id }}">{{ a.subject_name }} — {{ a.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Exam Type</label>
+          <select name="exam_type" required>
+            <option>Mid Term</option><option>Final Term</option>
+            <option>Quiz</option><option>Assignment</option><option>Practical</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" name="fetch_students" class="btn btn-primary"><i class="fas fa-users"></i> Load Students</button>
+    </form>
+  </div>
+</div>
+
+{% if students %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-star" style="color: var(--warning);"></i> Enter Marks — {{ selected.exam_type }}</h3>
+  </div>
+  <div class="card-body">
+    <form method="POST">
+      <input type="hidden" name="save_marks" value="1">
+      <input type="hidden" name="class_id" value="{{ selected.class_id }}">
+      <input type="hidden" name="subject_id" value="{{ selected.subject_id }}">
+      <input type="hidden" name="exam_type" value="{{ selected.exam_type }}">
+      <div class="form-group" style="max-width: 200px;">
+        <label>Total Marks</label>
+        <input type="number" name="total_marks" placeholder="e.g. 100" required min="1">
+      </div>
+      {% for s in students %}
+      <input type="hidden" name="student_ids" value="{{ s.id }}">
+      {% endfor %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Roll No</th><th>Student Name</th><th>Marks Obtained</th></tr></thead>
+          <tbody>
+            {% for s in students %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td><span class="badge badge-secondary">{{ s.roll_number }}</span></td>
+              <td><strong>{{ s.name }}</strong></td>
+              <td><input type="number" name="marks_{{ s.id }}" placeholder="0" min="0" style="width: 100px;"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-2">
+        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save Marks</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

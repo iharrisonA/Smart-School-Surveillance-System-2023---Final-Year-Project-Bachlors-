@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Teachers — SSSS{% endblock %}
+{% block page_title %}Teacher Management{% endblock %}
+{% block page_subtitle %}Manage all teaching staff{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-3">
+  <div></div>
+  <a href="{{ url_for('admin_add_teacher') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Teacher</a>
+</div>
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-chalkboard-teacher" style="color: var(--primary);"></i> All Teachers</h3>
+    <span class="badge badge-info">{{ teachers|length }} total</span>
+  </div>
+  <div class="table-wrap">
+    {% if teachers %}
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Gender</th><th>Phone</th><th>DOB</th><th>CNIC</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for t in teachers %}
+        <tr>
+          <td><span class="badge badge-secondary">{{ t.id }}</span></td>
+          <td><strong>{{ t.name }}</strong></td>
+          <td style="font-size: 0.8rem; color: var(--muted);">{{ t.email }}</td>
+          <td>{{ t.gender }}</td>
+          <td>{{ t.phone }}</td>
+          <td>{{ t.dob }}</td>
+          <td style="font-size: 0.8rem;">{{ t.cnic }}</td>
+          <td>
+            <div class="flex gap-1">
+              <a href="{{ url_for('admin_edit_teacher', tid=t.id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-edit"></i></a>
+              <a href="{{ url_for('admin_delete_teacher', tid=t.id) }}" class="btn btn-sm btn-danger" data-confirm="Delete this teacher?"><i class="fas fa-trash"></i></a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><i class="fas fa-chalkboard-teacher"></i><p>No teachers added yet.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Subjects — SSSS{% endblock %}
+{% block page_title %}Subject Management{% endblock %}
+{% block page_subtitle %}Manage subjects per class{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><h3><i class="fas fa-plus-circle" style="color: var(--success);"></i> Add Subject</h3></div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('admin_add_subject') }}">
+        <div class="form-group">
+          <label>Subject Name *</label>
+          <input type="text" name="subject_name" placeholder="e.g., Mathematics" required>
+        </div>
+        <div class="form-group">
+          <label>Assign to Class</label>
+          <select name="class_id" required>
+            <option value="">Select Class</option>
+            {% for c in classes %}
+            <option value="{{ c.id }}">{{ c.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Add Subject</button>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h3><i class="fas fa-book" style="color: var(--primary);"></i> All Subjects</h3>
+      <span class="badge badge-info">{{ subjects|length }}</span>
+    </div>
+    <div class="table-wrap">
+      {% if subjects %}
+      <table>
+        <thead><tr><th>ID</th><th>Subject</th><th>Class</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for s in subjects %}
+          <tr>
+            <td>{{ s.id }}</td>
+            <td><strong>{{ s.subject_name }}</strong></td>
+            <td><span class="badge badge-info">{{ s.class_name or 'N/A' }}</span></td>
+            <td><a href="{{ url_for('admin_delete_subject', sid=s.id) }}" class="btn btn-sm btn-danger" data-confirm="Delete subject?"><i class="fas fa-trash"></i></a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state"><i class="fas fa-book"></i><p>No subjects added yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Generate Voucher — SSSS{% endblock %}
+{% block page_title %}Generate Fee Voucher{% endblock %}
+{% block page_subtitle %}Search student and generate fee voucher{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 700px;">
+  <div class="card-header"><h3><i class="fas fa-receipt" style="color: var(--accent2);"></i> Fee Voucher Generator</h3></div>
+  <div class="card-body">
+    <!-- Search Form -->
+    <form method="POST">
+      <div class="flex gap-2 items-center mb-3">
+        <div style="flex: 1;" class="form-group" style="margin-bottom: 0;">
+          <label>Enter Roll Number or Student ID</label>
+          <input type="text" name="roll_number" placeholder="e.g. 1001" {% if student %}value="{{ student.roll_number }}"{% endif %}>
+        </div>
+        <div style="padding-top: 1.5rem;">
+          <button type="submit" name="search" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        </div>
+      </div>
+    </form>
+
+    {% if student %}
+    <!-- Student Details -->
+    <div style="background: #f9fafb; border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border);">
+      <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 0.85rem;">Student Details</h4>
+      <div class="form-grid">
+        <div><span class="text-sm text-muted">Roll Number</span><br><strong>{{ student.roll_number }}</strong></div>
+        <div><span class="text-sm text-muted">Student Name</span><br><strong>{{ student.name }}</strong></div>
+        <div><span class="text-sm text-muted">Father Name</span><br><strong>{{ student.parent_name }}</strong></div>
+        <div><span class="text-sm text-muted">Address</span><br><strong>{{ student.address }}</strong></div>
+        <div><span class="text-sm text-muted">Class</span><br><strong>{{ student.class_name }}</strong></div>
+        {% if fee %}
+        <div><span class="text-sm text-muted">Tuition Fee</span><br><strong>PKR {{ "%.0f"|format(fee.amount) }}</strong></div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if fee %}
+    <form method="POST">
+      <input type="hidden" name="student_id" value="{{ student.id }}">
+      <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+      <input type="hidden" name="base_amount" value="{{ fee.amount }}">
+      <input type="hidden" name="transport" value="{{ fee.transport }}">
+      <input type="hidden" name="sports" value="{{ fee.sports }}">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Discount (PKR)</label>
+          <input type="number" name="discount" placeholder="0" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label>Payment Due Date</label>
+          <input type="date" name="till_date" required>
+        </div>
+      </div>
+      <div style="background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 8px; padding: 0.85rem; margin-bottom: 1rem;">
+        <div class="flex justify-between text-sm"><span>Tuition Fee:</span><strong>PKR {{ "%.0f"|format(fee.amount) }}</strong></div>
+        {% if fee.transport > 0 %}<div class="flex justify-between text-sm"><span>Transport:</span><strong>PKR {{ "%.0f"|format(fee.transport) }}</strong></div>{% endif %}
+        {% if fee.sports > 0 %}<div class="flex justify-between text-sm"><span>Sports:</span><strong>PKR {{ "%.0f"|format(fee.sports) }}</strong></div>{% endif %}
+      </div>
+      <button type="submit" name="generate" class="btn btn-success"><i class="fas fa-print"></i> Generate Voucher</button>
+    </form>
+    {% else %}
+    <div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> No fee structure set for {{ student.class_name }}. Please set fees first.</div>
+    {% endif %}
+
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

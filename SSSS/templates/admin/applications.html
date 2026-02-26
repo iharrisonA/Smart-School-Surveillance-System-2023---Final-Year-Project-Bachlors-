@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Applications — SSSS{% endblock %}
+{% block page_title %}Student Applications{% endblock %}
+{% block page_subtitle %}Review and manage student applications{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-file-alt" style="color: var(--accent);"></i> Submitted Applications</h3>
+    <span class="badge badge-warning">{{ applications|selectattr('status','equalto','Pending')|list|length }} Pending</span>
+  </div>
+  {% if applications %}
+  <div style="padding: 1rem; display: flex; flex-direction: column; gap: 0.85rem;">
+    {% for app in applications %}
+    <div style="border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; background: {% if app.status == 'Pending' %}#fffbeb{% elif app.status == 'Approved' %}#f0fdf4{% else %}#fef2f2{% endif %};">
+      <div class="flex justify-between items-center mb-1">
+        <div class="flex items-center gap-2">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700;">{{ app.student_name[0] }}</div>
+          <div>
+            <strong>{{ app.student_name }}</strong>
+            <div style="font-size: 0.75rem; color: var(--muted);">Roll No: {{ app.roll_number }} &bull; Sent to: {{ app.send_to }}</div>
+          </div>
+        </div>
+        <span class="badge badge-{{ 'warning' if app.status == 'Pending' else 'success' if app.status == 'Approved' else 'danger' }}">{{ app.status }}</span>
+      </div>
+      <div style="margin: 0.5rem 0;">
+        <strong style="font-size: 0.875rem;">Subject:</strong> <span style="font-size: 0.875rem;">{{ app.subject }}</span>
+      </div>
+      <p style="font-size: 0.875rem; color: #374151; margin-bottom: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.7); border-radius: 8px;">{{ app.details }}</p>
+      {% if app.status == 'Pending' %}
+      <div class="flex gap-1">
+        <a href="{{ url_for('admin_application_action', aid=app.id, action='approve') }}" class="btn btn-sm btn-success"><i class="fas fa-check"></i> Accept</a>
+        <a href="{{ url_for('admin_application_action', aid=app.id, action='reject') }}" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Reject</a>
+      </div>
+      {% endif %}
+      <div style="font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem;"><i class="fas fa-clock"></i> {{ app.created_at }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><i class="fas fa-file-alt"></i><p>No applications submitted yet.</p></div>
+  {% endif %}
+</div>
+{% endblock %}
