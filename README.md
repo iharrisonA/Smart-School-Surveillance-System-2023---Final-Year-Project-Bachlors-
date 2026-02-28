@@ -15,4 +15,5 @@ Database: SQL Server · Code First Migrations
 Frontend: Bootstrap 5 · Bootstrap Icons · Razor Views
 
 📄 Default Login
-RoleEmailPasswordAdminadmin@ssss.eduAdmin@123
+Role    Email            Password      
+Admin   admin@ssss.edu   Admin@123
