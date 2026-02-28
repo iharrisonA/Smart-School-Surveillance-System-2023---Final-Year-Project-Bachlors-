@@ -14,6 +14,7 @@ Backend: C# · ASP.NET Core 8 MVC · Entity Framework Core · BCrypt.Net
 Database: SQL Server · Code First Migrations
 Frontend: Bootstrap 5 · Bootstrap Icons · Razor Views
 
-📄 Default Login
+📄 Default Login:
+
 Role    Email            Password      
 Admin   admin@ssss.edu   Admin@123
