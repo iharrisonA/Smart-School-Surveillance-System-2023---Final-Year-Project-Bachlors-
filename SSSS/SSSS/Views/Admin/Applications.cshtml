@@ -1,0 +1,35 @@
+@model IEnumerable<LeaveApplication>
+@{ ViewData["Title"] = "Leave Applications"; ViewData["Active"] = "Applications"; }
+<div class="card">
+    <div class="card-header"><i class="bi bi-file-earmark-check me-2"></i>Leave Applications</div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light"><tr><th>Student</th><th>Reason</th><th>From</th><th>To</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">@a.Student?.FullName</td>
+                    <td>@a.Reason</td>
+                    <td>@a.FromDate.ToString("dd MMM")</td>
+                    <td>@a.ToDate.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <span class="badge @(a.Status == "Approved" ? "bg-success" : a.Status == "Rejected" ? "bg-danger" : "bg-warning text-dark")">@a.Status</span>
+                    </td>
+                    <td>
+                        @if (a.Status == "Pending")
+                        {
+                            <form asp-action="ReviewApplication" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@a.Id"/>
+                                <button type="submit" name="status" value="Approved" class="btn btn-sm btn-success">Approve</button>
+                                <button type="submit" name="status" value="Rejected" class="btn btn-sm btn-danger">Reject</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

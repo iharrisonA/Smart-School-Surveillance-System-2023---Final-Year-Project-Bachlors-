@@ -1,0 +1,8 @@
+@model IEnumerable<FeeVoucher>
+@{ ViewData["Title"] = "My Fee Vouchers"; ViewData["Active"] = "Fees"; }
+<div class="card"><div class="card-header"><i class="bi bi-receipt me-2"></i>My Fee Vouchers</div>
+<div class="card-body p-0"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>Period</th><th>Amount</th><th>Status</th><th>Issued</th><th>Paid</th></tr></thead>
+<tbody>@foreach (var v in Model){<tr><td class="fw-semibold">@v.Month @v.Year</td><td>PKR @v.Amount.ToString("N0")</td>
+<td><span class="badge @(v.Status == "Paid" ? "badge-paid" : "badge-pending")">@v.Status</span></td>
+<td>@v.IssuedDate.ToString("dd MMM yyyy")</td><td>@(v.PaidDate.HasValue ? v.PaidDate.Value.ToString("dd MMM yyyy") : "—")</td></tr>}
+</tbody></table></div></div>

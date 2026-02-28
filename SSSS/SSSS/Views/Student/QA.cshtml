@@ -1,0 +1,17 @@
+@model IEnumerable<QAQuestion>
+@{ ViewData["Title"] = "Q & A"; ViewData["Active"] = "QA"; }
+<div class="row g-3">
+<div class="col-md-4"><div class="card"><div class="card-header"><i class="bi bi-plus-circle me-2"></i>Ask a Question</div>
+<div class="card-body"><form asp-action="AskQuestion" method="post">@Html.AntiForgeryToken()
+<div class="mb-2"><label class="form-label small fw-semibold">Subject</label><select name="subjectId" asp-items="ViewBag.Subjects" class="form-select"><option value="">Select Subject</option></select></div>
+<div class="mb-3"><label class="form-label small fw-semibold">Question</label><textarea name="questionText" class="form-control" rows="4" required></textarea></div>
+<button type="submit" class="btn btn-primary w-100">Ask Question</button></form></div></div></div>
+<div class="col-md-8"><div class="card"><div class="card-header"><i class="bi bi-chat-dots me-2"></i>All Questions & Answers</div>
+<div class="card-body">@foreach (var q in Model){
+<div class="border rounded p-3 mb-3">
+    <div class="d-flex justify-content-between mb-1"><strong>@q.QuestionText</strong><small class="text-muted">@q.Subject?.Name · @q.AskedAt.ToString("dd MMM")</small></div>
+    @if (!q.Answers.Any()){<p class="text-muted small mb-0"><i>No answer yet.</i></p>}
+    @foreach (var a in q.Answers){<div class="bg-light rounded p-2 mt-2"><small class="text-success fw-semibold">@a.Teacher?.FullName answered:</small><br/>@a.AnswerText</div>}
+</div>}
+@if (!Model.Any()){<p class="text-muted text-center py-3">No questions yet. Ask your first question!</p>}
+</div></div></div></div>

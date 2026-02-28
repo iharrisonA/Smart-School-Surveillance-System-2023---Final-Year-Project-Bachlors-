@@ -1,0 +1,56 @@
+@model IEnumerable<FeeVoucher>
+@{ ViewData["Title"] = "Fee Vouchers"; ViewData["Active"] = "Fees"; }
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-plus-circle me-2"></i>Generate Voucher</div>
+            <div class="card-body">
+                <form asp-action="GenerateVoucher" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-2"><label class="form-label small fw-semibold">Student</label><select name="studentId" asp-items="ViewBag.Students" class="form-select"><option value="">Select Student</option></select></div>
+                    <div class="mb-2"><label class="form-label small fw-semibold">Month</label>
+                        <select name="month" class="form-select">
+                            @foreach (var m in new[]{"January","February","March","April","May","June","July","August","September","October","November","December"})
+                            { <option value="@m">@m</option> }
+                        </select>
+                    </div>
+                    <div class="mb-2"><label class="form-label small fw-semibold">Year</label><input name="year" type="number" class="form-control" value="@DateTime.Now.Year"/></div>
+                    <div class="mb-3"><label class="form-label small fw-semibold">Amount (PKR)</label><input name="amount" type="number" step="0.01" class="form-control" placeholder="5000"/></div>
+                    <button type="submit" class="btn btn-primary w-100">Generate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-receipt me-2"></i>All Fee Vouchers</div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light"><tr><th>Student</th><th>Period</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                    @foreach (var v in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@v.Student?.FullName</td>
+                            <td>@v.Month @v.Year</td>
+                            <td>PKR @v.Amount.ToString("N0")</td>
+                            <td><span class="badge @(v.Status == "Paid" ? "badge-paid" : "badge-pending")">@v.Status</span></td>
+                            <td class="d-flex gap-1">
+                                <a asp-action="ViewVoucher" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                @if (v.Status == "Pending")
+                                {
+                                    <form asp-action="MarkFeePaid" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@v.Id"/>
+                                        @Html.AntiForgeryToken()
+                                        <button class="btn btn-sm btn-outline-success">Mark Paid</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

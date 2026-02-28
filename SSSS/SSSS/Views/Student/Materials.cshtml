@@ -1,0 +1,7 @@
+@model IEnumerable<LectureMaterial>
+@{ ViewData["Title"] = "Study Materials"; ViewData["Active"] = "Materials"; }
+<div class="card"><div class="card-header"><i class="bi bi-folder me-2"></i>Study Materials</div>
+<div class="card-body p-0"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>Title</th><th>Subject</th><th>Teacher</th><th>Date</th><th>Download</th></tr></thead>
+<tbody>@foreach (var m in Model){<tr><td class="fw-semibold">@m.Title<br/><small class="text-muted">@m.Description</small></td><td>@m.Subject?.Name</td><td>@m.Teacher?.FullName</td><td>@m.UploadedAt.ToString("dd MMM yyyy")</td>
+<td>@if (m.FilePath != null){<a href="/@m.FilePath" target="_blank" class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i> Download</a>}</td></tr>}
+</tbody></table></div></div>

@@ -1,0 +1,37 @@
+@model FeeVoucher
+@{ ViewData["Title"] = "Fee Voucher"; ViewData["Active"] = "Fees"; }
+<div class="card" style="max-width:600px;margin:auto">
+    <div class="card-body p-4" id="printArea">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold" style="color:#1a237e">🏫 Smart School Surveillance System</h3>
+            <h5 class="text-muted">FEE VOUCHER</h5>
+            <hr/>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6"><strong>Voucher #:</strong> @Model.Id</div>
+            <div class="col-6 text-end"><strong>Date:</strong> @Model.IssuedDate.ToString("dd MMM yyyy")</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6"><strong>Student Name:</strong><br/>@Model.Student?.FullName</div>
+            <div class="col-6"><strong>Class:</strong><br/>@(Model.Student?.Class?.Name ?? "—")</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6"><strong>Roll No:</strong><br/>@Model.Student?.RollNumber</div>
+            <div class="col-6"><strong>Period:</strong><br/>@Model.Month @Model.Year</div>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Total Amount:</h5>
+            <h4 class="fw-bold" style="color:#1a237e">PKR @Model.Amount.ToString("N0")</h4>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between">
+            <span>Status: <span class="badge @(Model.Status == "Paid" ? "bg-success" : "bg-warning text-dark")">@Model.Status</span></span>
+            @if (Model.PaidDate.HasValue) { <span>Paid on: @Model.PaidDate.Value.ToString("dd MMM yyyy")</span> }
+        </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-primary"><i class="bi bi-printer me-1"></i>Print</button>
+        <a asp-action="Fees" class="btn btn-outline-secondary">Back</a>
+    </div>
+</div>

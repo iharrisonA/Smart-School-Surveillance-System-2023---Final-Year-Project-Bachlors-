@@ -1,0 +1,36 @@
+@model IEnumerable<Subject>
+@{ ViewData["Title"] = "Subjects"; ViewData["Active"] = "Subjects"; }
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-plus-circle me-2"></i>Add Subject</div>
+            <div class="card-body">
+                <form asp-action="AddSubject" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-2"><label class="form-label small fw-semibold">Subject Name *</label><input name="name" class="form-control" required/></div>
+                    <div class="mb-3"><label class="form-label small fw-semibold">Code</label><input name="code" class="form-control" placeholder="e.g. MATH"/></div>
+                    <button type="submit" class="btn btn-primary w-100">Add Subject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-book me-2"></i>All Subjects</div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light"><tr><th>Name</th><th>Code</th></tr></thead>
+                    <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@s.Name</td>
+                            <td><span class="badge bg-secondary">@s.Code</span></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

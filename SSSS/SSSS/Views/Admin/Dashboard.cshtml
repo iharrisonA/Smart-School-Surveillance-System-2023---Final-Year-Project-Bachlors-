@@ -1,0 +1,88 @@
+@model DashboardViewModel
+@{ ViewData["Title"] = "Admin Dashboard"; ViewData["Active"] = "Dashboard"; }
+
+<div class="row g-3 mb-4">
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#1a237e,#283593)">
+            <div class="number">@Model.TotalStudents</div>
+            <div class="label"><i class="bi bi-people me-1"></i>Students</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#00acc1,#0097a7)">
+            <div class="number">@Model.TotalTeachers</div>
+            <div class="label"><i class="bi bi-person-badge me-1"></i>Teachers</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#43a047,#388e3c)">
+            <div class="number">@Model.TotalClasses</div>
+            <div class="label"><i class="bi bi-building me-1"></i>Classes</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#f9a825,#f57f17)">
+            <div class="number">@Model.TotalSubjects</div>
+            <div class="label"><i class="bi bi-book me-1"></i>Subjects</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#e53935,#c62828)">
+            <div class="number">@Model.PendingApplications</div>
+            <div class="label"><i class="bi bi-file-earmark me-1"></i>Leave Pending</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="background: linear-gradient(135deg,#7b1fa2,#6a1b9a)">
+            <div class="number">@Model.PendingFees</div>
+            <div class="label"><i class="bi bi-receipt me-1"></i>Fees Pending</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="bi bi-megaphone me-2"></i>Recent Announcements</span>
+                <a asp-action="Announcements" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                @if (!Model.RecentAnnouncements.Any())
+                {
+                    <p class="text-muted text-center py-4">No announcements yet.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var a in Model.RecentAnnouncements)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <strong class="small">@a.Title</strong>
+                                    <span class="badge bg-secondary">@a.Audience</span>
+                                </div>
+                                <div class="text-muted" style="font-size:.8rem">@a.Teacher.FullName · @a.CreatedAt.ToString("dd MMM yyyy")</div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-lightning-charge me-2"></i>Quick Actions</div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-6"><a asp-action="AddStudent" class="btn btn-outline-primary w-100"><i class="bi bi-person-plus me-1"></i>Add Student</a></div>
+                    <div class="col-6"><a asp-action="AddTeacher" class="btn btn-outline-success w-100"><i class="bi bi-person-plus me-1"></i>Add Teacher</a></div>
+                    <div class="col-6"><a asp-action="Fees" class="btn btn-outline-warning w-100"><i class="bi bi-receipt me-1"></i>Fee Vouchers</a></div>
+                    <div class="col-6"><a asp-action="Applications" class="btn btn-outline-danger w-100"><i class="bi bi-file-earmark me-1"></i>Applications</a></div>
+                    <div class="col-6"><a asp-action="AssignSubject" class="btn btn-outline-info w-100"><i class="bi bi-diagram-3 me-1"></i>Assign Subject</a></div>
+                    <div class="col-6"><a asp-action="Classes" class="btn btn-outline-secondary w-100"><i class="bi bi-building me-1"></i>Manage Classes</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

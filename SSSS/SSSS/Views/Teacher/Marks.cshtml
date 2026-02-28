@@ -1,0 +1,11 @@
+@{ ViewData["Title"] = "Enter Marks"; ViewData["Active"] = "Marks"; }
+<div class="card"><div class="card-header"><i class="bi bi-bar-chart me-2"></i>Enter Student Marks</div>
+<div class="card-body">
+<div class="row g-3 mb-3">
+    <div class="col-md-3"><label class="form-label small fw-semibold">Subject</label><select asp-items="ViewBag.Subjects" class="form-select"><option value="">Select Subject</option></select></div>
+    <div class="col-md-3"><label class="form-label small fw-semibold">Class</label><select asp-items="ViewBag.Classes" class="form-select"><option value="">Select Class</option></select></div>
+    <div class="col-md-3"><label class="form-label small fw-semibold">Exam Type</label><select class="form-select">@foreach (var e in (List<string>)ViewBag.ExamTypes){<option value="@e">@e</option>}</select></div>
+    <div class="col-md-3"><label class="form-label small fw-semibold">Total Marks</label><input type="number" class="form-control" placeholder="100"/></div>
+</div>
+<p class="text-muted">Select options above to load students for mark entry.</p>
+</div></div>

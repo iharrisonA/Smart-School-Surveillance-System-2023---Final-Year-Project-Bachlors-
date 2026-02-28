@@ -1,0 +1,12 @@
+@model IEnumerable<Announcement>
+@{ ViewData["Title"] = "Announcements"; ViewData["Active"] = "Announcements"; }
+<div class="row g-3">
+<div class="col-md-4"><div class="card"><div class="card-header"><i class="bi bi-plus-circle me-2"></i>Post Announcement</div>
+<div class="card-body"><form asp-action="PostAnnouncement" method="post">@Html.AntiForgeryToken()
+<div class="mb-2"><label class="form-label small fw-semibold">Title</label><input name="title" class="form-control" required/></div>
+<div class="mb-2"><label class="form-label small fw-semibold">Content</label><textarea name="content" class="form-control" rows="4" required></textarea></div>
+<div class="mb-3"><label class="form-label small fw-semibold">Audience</label><select name="audience" class="form-select"><option value="All">All</option><option value="Students">Students</option></select></div>
+<button type="submit" class="btn btn-primary w-100">Post</button></form></div></div></div>
+<div class="col-md-8"><div class="card"><div class="card-header"><i class="bi bi-megaphone me-2"></i>My Announcements</div>
+<div class="card-body">@foreach (var a in Model){<div class="border rounded p-3 mb-2"><div class="d-flex justify-content-between"><h6>@a.Title</h6><small class="text-muted">@a.CreatedAt.ToString("dd MMM yyyy")</small></div><p class="mb-0 text-muted">@a.Content</p></div>}
+@if (!Model.Any()){<p class="text-muted text-center py-3">No announcements yet.</p>}</div></div></div></div>

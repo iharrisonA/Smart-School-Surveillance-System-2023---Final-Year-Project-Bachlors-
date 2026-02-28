@@ -1,0 +1,13 @@
+@{ ViewData["Title"] = "Lecture Materials"; ViewData["Active"] = "Lectures"; }
+<div class="row g-3">
+<div class="col-md-4"><div class="card"><div class="card-header"><i class="bi bi-upload me-2"></i>Upload Material</div>
+<div class="card-body"><form asp-action="UploadLecture" method="post" enctype="multipart/form-data">@Html.AntiForgeryToken()
+<div class="mb-2"><label class="form-label small fw-semibold">Subject</label><select name="subjectId" asp-items="ViewBag.Subjects" class="form-select"><option value="">Select</option></select></div>
+<div class="mb-2"><label class="form-label small fw-semibold">Title *</label><input name="title" class="form-control" required/></div>
+<div class="mb-2"><label class="form-label small fw-semibold">Description</label><textarea name="description" class="form-control" rows="2"></textarea></div>
+<div class="mb-3"><label class="form-label small fw-semibold">File</label><input name="file" type="file" class="form-control"/></div>
+<button type="submit" class="btn btn-primary w-100">Upload</button></form></div></div></div>
+<div class="col-md-8"><div class="card"><div class="card-header"><i class="bi bi-folder me-2"></i>Uploaded Materials</div>
+<div class="card-body p-0"><table class="table table-hover mb-0"><thead class="table-light"><tr><th>Title</th><th>Subject</th><th>Date</th><th>File</th></tr></thead><tbody>
+@foreach (var m in (List<LectureMaterial>)ViewBag.Materials){<tr><td class="fw-semibold">@m.Title</td><td>@m.Subject?.Name</td><td>@m.UploadedAt.ToString("dd MMM yyyy")</td><td>@if (m.FilePath != null){<a href="/@m.FilePath" target="_blank" class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i></a>}</td></tr>}
+</tbody></table></div></div></div></div>

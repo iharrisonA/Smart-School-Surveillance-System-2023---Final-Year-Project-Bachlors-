@@ -1,0 +1,19 @@
+@model IEnumerable<Announcement>
+@{ ViewData["Title"] = "Announcements"; ViewData["Active"] = "Announcements"; }
+<div class="card">
+    <div class="card-header"><i class="bi bi-megaphone me-2"></i>All Announcements</div>
+    <div class="card-body">
+        @foreach (var a in Model)
+        {
+            <div class="border rounded p-3 mb-3">
+                <div class="d-flex justify-content-between">
+                    <h6 class="fw-bold mb-1">@a.Title</h6>
+                    <div><span class="badge bg-info text-dark me-1">@a.Audience</span><small class="text-muted">@a.CreatedAt.ToString("dd MMM yyyy")</small></div>
+                </div>
+                <p class="mb-1 text-muted small">By @a.Teacher?.FullName</p>
+                <p class="mb-0">@a.Content</p>
+            </div>
+        }
+        @if (!Model.Any()) { <p class="text-center text-muted py-3">No announcements yet.</p> }
+    </div>
+</div>

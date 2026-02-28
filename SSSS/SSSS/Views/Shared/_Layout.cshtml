@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — SSSS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <style>
+        :root { --primary: #1a237e; --accent: #00acc1; }
+        body { background: #f4f6fb; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 240px; min-height: 100vh; background: var(--primary); position: fixed; top: 0; left: 0; z-index: 100; }
+        .sidebar .brand { padding: 1.4rem 1rem; border-bottom: 1px solid rgba(255,255,255,.15); }
+        .sidebar .brand h5 { color: #fff; font-weight: 700; margin: 0; font-size: 1.1rem; }
+        .sidebar .brand small { color: rgba(255,255,255,.6); font-size: .75rem; }
+        .sidebar .nav-link { color: rgba(255,255,255,.75); padding: .55rem 1.2rem; border-radius: 6px; margin: 2px 8px; display: flex; align-items: center; gap: .6rem; transition: .2s; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,.15); color: #fff; }
+        .sidebar .nav-link i { font-size: 1rem; width: 1.2rem; }
+        .sidebar .section-label { color: rgba(255,255,255,.4); font-size: .68rem; text-transform: uppercase; letter-spacing: 1px; padding: .8rem 1.4rem .2rem; }
+        .main-content { margin-left: 240px; padding: 1.5rem 2rem; }
+        .topbar { background: #fff; border-radius: 10px; padding: .8rem 1.4rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 6px rgba(0,0,0,.07); }
+        .topbar h6 { margin: 0; font-weight: 600; color: #333; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+        .card-header { background: transparent; border-bottom: 1px solid #eee; font-weight: 600; }
+        .stat-card { border-radius: 12px; padding: 1.3rem 1.5rem; color: #fff; }
+        .stat-card .number { font-size: 2rem; font-weight: 700; }
+        .stat-card .label { font-size: .85rem; opacity: .85; }
+        .badge-status-present { background: #e8f5e9; color: #2e7d32; }
+        .badge-status-absent  { background: #ffebee; color: #c62828; }
+        .badge-status-late    { background: #fff3e0; color: #e65100; }
+        .badge-paid    { background: #e8f5e9; color: #2e7d32; }
+        .badge-pending { background: #fff3e0; color: #e65100; }
+        .alert { border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+@{
+    var role = Context.Session.GetString("UserRole");
+    var userName = Context.Session.GetString("UserName");
+}
+
+@if (role != null)
+{
+    <div class="sidebar">
+        <div class="brand">
+            <h5>🏫 SSSS</h5>
+            <small>Smart School Surveillance System</small>
+        </div>
+
+        @if (role == "Admin")
+        {
+            <span class="section-label">Administration</span>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Admin" asp-action="Dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Students" ? "active" : "")" asp-controller="Admin" asp-action="Students"><i class="bi bi-people"></i> Students</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Teachers" ? "active" : "")" asp-controller="Admin" asp-action="Teachers"><i class="bi bi-person-badge"></i> Teachers</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Classes" ? "active" : "")" asp-controller="Admin" asp-action="Classes"><i class="bi bi-building"></i> Classes</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Subjects" ? "active" : "")" asp-controller="Admin" asp-action="Subjects"><i class="bi bi-book"></i> Subjects</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "AssignSubject" ? "active" : "")" asp-controller="Admin" asp-action="AssignSubject"><i class="bi bi-diagram-3"></i> Assign Subjects</a>
+            <span class="section-label">Finance & Admin</span>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Fees" ? "active" : "")" asp-controller="Admin" asp-action="Fees"><i class="bi bi-receipt"></i> Fee Vouchers</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Applications" ? "active" : "")" asp-controller="Admin" asp-action="Applications"><i class="bi bi-file-earmark-check"></i> Leave Applications</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Announcements" ? "active" : "")" asp-controller="Admin" asp-action="Announcements"><i class="bi bi-megaphone"></i> Announcements</a>
+        }
+        else if (role == "Teacher")
+        {
+            <span class="section-label">Teacher Portal</span>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Teacher" asp-action="Dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Attendance" ? "active" : "")" asp-controller="Teacher" asp-action="Attendance"><i class="bi bi-calendar-check"></i> Attendance</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Marks" ? "active" : "")" asp-controller="Teacher" asp-action="Marks"><i class="bi bi-bar-chart"></i> Enter Marks</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Lectures" ? "active" : "")" asp-controller="Teacher" asp-action="Lectures"><i class="bi bi-folder"></i> Lecture Materials</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Announcements" ? "active" : "")" asp-controller="Teacher" asp-action="Announcements"><i class="bi bi-megaphone"></i> Announcements</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "QA" ? "active" : "")" asp-controller="Teacher" asp-action="QA"><i class="bi bi-chat-dots"></i> Q &amp; A</a>
+        }
+        else if (role == "Student")
+        {
+            <span class="section-label">Student Portal</span>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Student" asp-action="Dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Attendance" ? "active" : "")" asp-controller="Student" asp-action="Attendance"><i class="bi bi-calendar-check"></i> My Attendance</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Marks" ? "active" : "")" asp-controller="Student" asp-action="Marks"><i class="bi bi-bar-chart"></i> My Marks</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Materials" ? "active" : "")" asp-controller="Student" asp-action="Materials"><i class="bi bi-folder"></i> Study Materials</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Fees" ? "active" : "")" asp-controller="Student" asp-action="Fees"><i class="bi bi-receipt"></i> Fee Vouchers</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "Applications" ? "active" : "")" asp-controller="Student" asp-action="Applications"><i class="bi bi-file-earmark-check"></i> Leave Application</a>
+            <a class="nav-link @(ViewData["Active"]?.ToString() == "QA" ? "active" : "")" asp-controller="Student" asp-action="QA"><i class="bi bi-chat-dots"></i> Q &amp; A</a>
+        }
+
+        <div style="position: absolute; bottom: 1rem; left: 0; right: 0; padding: 0 .8rem;">
+            <a asp-controller="Account" asp-action="Logout" class="nav-link text-danger">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <h6>@ViewData["Title"]</h6>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-primary">@role</span>
+                <span class="text-muted small"><i class="bi bi-person-circle me-1"></i>@userName</span>
+            </div>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @RenderBody()
+    </div>
+}
+else
+{
+    @RenderBody()
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,8 @@
+@{ ViewData["Title"] = "Teacher Dashboard"; ViewData["Active"] = "Dashboard"; }
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="stat-card" style="background:linear-gradient(135deg,#1a237e,#283593)"><div class="number">@ViewBag.TotalStudents</div><div class="label"><i class="bi bi-people me-1"></i>Total Students</div></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:linear-gradient(135deg,#00acc1,#0097a7)"><div class="number">@ViewBag.MyClasses</div><div class="label"><i class="bi bi-building me-1"></i>My Classes</div></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:linear-gradient(135deg,#43a047,#388e3c)"><div class="number">@ViewBag.MySubjects</div><div class="label"><i class="bi bi-book me-1"></i>My Subjects</div></div></div>
+</div>
+<div class="card"><div class="card-header"><i class="bi bi-megaphone me-2"></i>Recent Announcements</div>
+<div class="card-body">@foreach (var a in (List<Announcement>)ViewBag.RecentAnnouncements){<div class="border rounded p-3 mb-2"><h6 class="mb-1">@a.Title</h6><p class="mb-0 text-muted small">@a.Content</p></div>}</div></div>
